@@ -6,19 +6,18 @@
   <title>Drumandbytes OÜ</title>
 
   <meta name="description" content="Drumandbytes OÜ — the Estonian company behind Eraser, Teesilm, F1 Circuit Walks, Mystery Games and the drumandbytes open-source tools.">
-  <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://drumandbytes.ee/">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Drumandbytes OÜ">
   <meta property="og:description" content="The Estonian company behind Eraser, Teesilm, F1 Circuit Walks, Mystery Games and the drumandbytes open-source tools.">
   <meta property="og:url" content="https://drumandbytes.ee/">
-  <meta property="og:image" content="https://drumandbytes.ee/assets/dnb-robot.png">
+  <meta property="og:image" content="https://drumandbytes.ee/assets/logo.png">
   <meta name="twitter:card" content="summary">
 
-  <link rel="icon" href="assets/dnb-robot.svg" type="image/svg+xml">
-  <link rel="alternate icon" href="assets/dnb-robot.png">
+  <link rel="icon" href="assets/logo.png" type="image/png">
 
   <script type="application/ld+json">
   {
@@ -27,7 +26,7 @@
     "name": "Drumandbytes OÜ",
     "legalName": "Drumandbytes OÜ",
     "url": "https://drumandbytes.ee/",
-    "logo": "https://drumandbytes.ee/assets/dnb-robot.png",
+    "logo": "https://drumandbytes.ee/assets/logo.png",
     "identifier": "17599202",
     "email": "maris@drumandbytes.com",
     "address": {
@@ -47,110 +46,180 @@
 
   <style>
     :root {
-      --bg: #f7f7f5;
-      --fg: #1c1d1f;
-      --muted: #5c5f66;
-      --line: #dcdcd8;
-      --accent: #3454d1;
+      --bg: #faf8f5;
+      --card: #ffffff;
+      --fg: #1a1b1e;
+      --muted: #67666f;
+      --line: #e6e2db;
+      --accent: #ff6633;
+      --accent-soft: rgba(255, 102, 51, 0.12);
+      --chip-bg: #ffffff;
     }
     @media (prefers-color-scheme: dark) {
-      :root { --bg: #14161a; --fg: #ecedee; --muted: #9a9da5; --line: #2a2d33; --accent: #7c9bff; }
+      :root {
+        --bg: #111318;
+        --card: #191b21;
+        --fg: #eeeef0;
+        --muted: #9a9ba5;
+        --line: #2a2c34;
+        --accent: #ff8a5c;
+        --accent-soft: rgba(255, 138, 92, 0.14);
+        --chip-bg: #f3f1ec;
+      }
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: var(--bg);
+      background:
+        radial-gradient(560px 320px at 15% -10%, var(--accent-soft), transparent 70%),
+        var(--bg);
       color: var(--fg);
       font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
     main {
       max-width: 640px;
       margin: 0 auto;
-      padding: 4rem 1.5rem 3rem;
+      padding: 4.5rem 1.5rem 3rem;
     }
-    .id { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.75rem; }
-    .id img { width: 44px; height: 44px; }
-    h1 { font-size: 1.5rem; margin: 0; }
-    .lede { color: var(--muted); margin: 0 0 2.5rem; }
-    h2 {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+    .id { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.1rem; }
+    .id .mark {
+      width: 56px;
+      height: 56px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      background: var(--chip-bg);
+      border-radius: 16px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+    .id img { width: 34px; height: 34px; display: block; }
+    h1 { font-size: 1.85rem; letter-spacing: -0.01em; margin: 0; }
+    .lede {
       color: var(--muted);
-      margin: 2.5rem 0 0.9rem;
+      font-size: 1.05rem;
+      max-width: 34rem;
+      margin: 0 0 2.75rem;
     }
-    ul.projects { list-style: none; margin: 0; padding: 0; }
-    ul.projects li {
-      padding: 0.8rem 0;
-      border-top: 1px solid var(--line);
+    .lede a { color: var(--fg); text-decoration-color: var(--line); }
+    h2 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 2.75rem 0 1rem;
     }
-    ul.projects a { color: var(--fg); text-decoration: none; font-weight: 600; }
-    ul.projects a:hover { color: var(--accent); }
-    ul.projects p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.92rem; }
-    .sponsor {
-      display: inline-block;
-      margin-top: 0.5rem;
-      color: var(--accent);
+    .projects { display: grid; gap: 0.7rem; }
+    .project {
+      display: block;
+      padding: 1.1rem 1.2rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
       text-decoration: none;
-      font-weight: 600;
+      color: inherit;
+      transition: border-color 0.15s ease, transform 0.15s ease;
     }
+    .project:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .project-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .project-head strong { font-size: 1.02rem; }
+    .tag {
+      flex: none;
+      font: 600 0.68rem/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.3rem 0.5rem;
+      border-radius: 6px;
+    }
+    .project p { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.92rem; }
+    .project.multi .project-head strong { font-weight: 600; font-size: 0.95rem; }
+
+    .support {
+      margin-top: 2.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem 1.25rem;
+      color: var(--muted);
+    }
+    .support a { color: var(--fg); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line); }
+    .support a:hover { color: var(--accent); border-color: var(--accent); }
+    .support .sponsor { color: var(--accent); border-color: transparent; }
+
     footer {
       margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--line);
+      padding: 1.25rem 1.2rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
       color: var(--muted);
       font-size: 0.85rem;
     }
+    footer .legal-name { color: var(--fg); font-weight: 600; }
+    footer code {
+      font: 0.85em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--fg);
+    }
     footer a { color: inherit; }
+    .credit { margin-top: 1.1rem; font-size: 0.72rem; opacity: 0.6; }
+    .credit a { color: inherit; }
   </style>
 </head>
 
 <body>
   <main>
     <div class="id">
-      <img src="assets/dnb-robot.svg" alt="">
+      <span class="mark"><img src="assets/logo.png" alt=""></span>
       <h1>Drumandbytes OÜ</h1>
     </div>
     <p class="lede">
-      The Estonian company behind the software published under
+      One person, a handful of open-source projects and apps, published under
       <a href="https://github.com/drumandbytes">github.com/drumandbytes</a>.
     </p>
 
     <h2>Projects</h2>
-    <ul class="projects">
-      <li>
-        <a href="https://eraser.drumandbytes.dev/">Eraser</a>
+    <div class="projects">
+      <a class="project" href="https://eraser.drumandbytes.dev/">
+        <div class="project-head"><strong>Eraser</strong><span class="tag">CLI</span></div>
         <p>Free, open-source data-broker removal — GDPR/CCPA opt-out requests, sent from your own mailbox.</p>
-      </li>
-      <li>
-        <a href="https://roadconditions.drumandbytes.ee/">Teesilm</a>
+      </a>
+      <a class="project" href="https://roadconditions.drumandbytes.ee/">
+        <div class="project-head"><strong>Teesilm</strong><span class="tag">PWA</span></div>
         <p>Mobile-first PWA for Estonian road and weather conditions.</p>
-      </li>
-      <li>
-        <a href="https://f1walk.drumandbytes.dev/">F1 Circuit Walks</a>
+      </a>
+      <a class="project" href="https://f1walk.drumandbytes.dev/">
+        <div class="project-head"><strong>F1 Circuit Walks</strong><span class="tag">PWA</span></div>
         <p>Free walking guides to Formula 1 street circuits, with GPS tracking and offline support.</p>
-      </li>
-      <li>
-        <a href="https://mystery.drumandbytes.dev/">Mystery Games</a>
+      </a>
+      <a class="project" href="https://mystery.drumandbytes.dev/">
+        <div class="project-head"><strong>Mystery Games</strong><span class="tag">Game</span></div>
         <p>Detective dinner mysteries you can play at the table — no printing, no prep.</p>
-      </li>
-      <li>
-        <a href="https://github.com/drumandbytes/pve-metrics-exporter">pve-metrics-exporter</a>,
-        <a href="https://github.com/drumandbytes/opentofu-updater-action">opentofu-updater-action</a>,
-        <a href="https://github.com/drumandbytes/argocd-gitops-updater-action">argocd-gitops-updater-action</a>
+      </a>
+      <a class="project multi" href="https://github.com/orgs/drumandbytes/repositories?q=topic%3Agithub-action">
+        <div class="project-head">
+          <strong>pve-metrics-exporter · opentofu-updater-action · argocd-gitops-updater-action</strong>
+          <span class="tag">Actions</span>
+        </div>
         <p>Smaller open-source tools — Proxmox metrics, and GitHub Actions for keeping OpenTofu/Terraform and GitOps repos up to date.</p>
-      </li>
-    </ul>
-    <p>
-      Writing at <a href="https://drumandbytes.com/">drumandbytes.com</a>.
-      <br>
-      <a class="sponsor" href="https://github.com/sponsors/drumandbytes">Support the projects via GitHub Sponsors →</a>
-    </p>
+      </a>
+    </div>
+
+    <div class="support">
+      <span>Writing at <a href="https://drumandbytes.com/">drumandbytes.com</a></span>
+      <a class="sponsor" href="https://github.com/sponsors/drumandbytes">Support via GitHub Sponsors →</a>
+    </div>
 
     <footer>
-      Drumandbytes OÜ · registry code 17599202<br>
+      <span class="legal-name">Drumandbytes OÜ</span> · registry code <code>17599202</code><br>
       Uus-Sadama tn 21-207, Kesklinna linnaosa, Tallinn, Harju maakond, 10120, Estonia<br>
       <a href="mailto:maris@drumandbytes.com">maris@drumandbytes.com</a>
+      <div class="credit">Headphones mark: <a href="https://openmoji.org">OpenMoji</a> (CC BY-SA 4.0).</div>
     </footer>
   </main>
 </body>
