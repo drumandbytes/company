@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Drumandbytes OÜ</title>
+
+  <meta name="description" content="Drumandbytes OÜ — the Estonian company behind Eraser, Teesilm, F1 Circuit Walks, Mystery Games and the drumandbytes open-source tools.">
+  <meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://drumandbytes.ee/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Drumandbytes OÜ">
+  <meta property="og:description" content="The Estonian company behind Eraser, Teesilm, F1 Circuit Walks, Mystery Games and the drumandbytes open-source tools.">
+  <meta property="og:url" content="https://drumandbytes.ee/">
+  <meta property="og:image" content="https://drumandbytes.ee/assets/dnb-robot.png">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="assets/dnb-robot.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="assets/dnb-robot.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Drumandbytes OÜ",
+    "legalName": "Drumandbytes OÜ",
+    "url": "https://drumandbytes.ee/",
+    "logo": "https://drumandbytes.ee/assets/dnb-robot.png",
+    "identifier": "17599202",
+    "email": "maris@drumandbytes.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Uus-Sadama tn 21-207",
+      "addressLocality": "Tallinn",
+      "addressRegion": "Harju maakond",
+      "postalCode": "10120",
+      "addressCountry": "EE"
+    },
+    "sameAs": [
+      "https://github.com/drumandbytes",
+      "https://drumandbytes.com/"
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #f7f7f5;
+      --fg: #1c1d1f;
+      --muted: #5c5f66;
+      --line: #dcdcd8;
+      --accent: #3454d1;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #14161a; --fg: #ecedee; --muted: #9a9da5; --line: #2a2d33; --accent: #7c9bff; }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 3rem;
+    }
+    .id { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.75rem; }
+    .id img { width: 44px; height: 44px; }
+    h1 { font-size: 1.5rem; margin: 0; }
+    .lede { color: var(--muted); margin: 0 0 2.5rem; }
+    h2 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin: 2.5rem 0 0.9rem;
+    }
+    ul.projects { list-style: none; margin: 0; padding: 0; }
+    ul.projects li {
+      padding: 0.8rem 0;
+      border-top: 1px solid var(--line);
+    }
+    ul.projects a { color: var(--fg); text-decoration: none; font-weight: 600; }
+    ul.projects a:hover { color: var(--accent); }
+    ul.projects p { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.92rem; }
+    .sponsor {
+      display: inline-block;
+      margin-top: 0.5rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer a { color: inherit; }
+  </style>
+</head>
+
+<body>
+  <main>
+    <div class="id">
+      <img src="assets/dnb-robot.svg" alt="">
+      <h1>Drumandbytes OÜ</h1>
+    </div>
+    <p class="lede">
+      The Estonian company behind the software published under
+      <a href="https://github.com/drumandbytes">github.com/drumandbytes</a>.
+    </p>
+
+    <h2>Projects</h2>
+    <ul class="projects">
+      <li>
+        <a href="https://eraser.drumandbytes.dev/">Eraser</a>
+        <p>Free, open-source data-broker removal — GDPR/CCPA opt-out requests, sent from your own mailbox.</p>
+      </li>
+      <li>
+        <a href="https://roadconditions.drumandbytes.ee/">Teesilm</a>
+        <p>Mobile-first PWA for Estonian road and weather conditions.</p>
+      </li>
+      <li>
+        <a href="https://f1walk.drumandbytes.dev/">F1 Circuit Walks</a>
+        <p>Free walking guides to Formula 1 street circuits, with GPS tracking and offline support.</p>
+      </li>
+      <li>
+        <a href="https://mystery.drumandbytes.dev/">Mystery Games</a>
+        <p>Detective dinner mysteries you can play at the table — no printing, no prep.</p>
+      </li>
+      <li>
+        <a href="https://github.com/drumandbytes/pve-metrics-exporter">pve-metrics-exporter</a>,
+        <a href="https://github.com/drumandbytes/opentofu-updater-action">opentofu-updater-action</a>,
+        <a href="https://github.com/drumandbytes/argocd-gitops-updater-action">argocd-gitops-updater-action</a>
+        <p>Smaller open-source tools — Proxmox metrics, and GitHub Actions for keeping OpenTofu/Terraform and GitOps repos up to date.</p>
+      </li>
+    </ul>
+    <p>
+      Writing at <a href="https://drumandbytes.com/">drumandbytes.com</a>.
+      <br>
+      <a class="sponsor" href="https://github.com/sponsors/drumandbytes">Support the projects via GitHub Sponsors →</a>
+    </p>
+
+    <footer>
+      Drumandbytes OÜ · registry code 17599202<br>
+      Uus-Sadama tn 21-207, Kesklinna linnaosa, Tallinn, Harju maakond, 10120, Estonia<br>
+      <a href="mailto:maris@drumandbytes.com">maris@drumandbytes.com</a>
+    </footer>
+  </main>
+</body>
+</html>
