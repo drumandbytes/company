@@ -1,7 +1,11 @@
 name: IndexNow submit
 
-# Pages deploys via git integration, no wrangler step here to hook onto --
-# deployment_status fires once it's actually live instead.
+# This site deploys via classic GitHub Pages (legacy build, straight from
+# main), with Cloudflare only proxying in front -- not Cloudflare Pages, so
+# there's no wrangler step to hook a step onto. deployment_status fires once
+# it's actually live instead. GitHub Pages' own deployments always report
+# environment "github-pages", not "production" -- confirmed via
+# `gh api repos/drumandbytes/company/deployments`.
 
 on:
   deployment_status:
@@ -11,7 +15,7 @@ permissions:
 
 jobs:
   indexnow:
-    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'production'
+    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'github-pages'
     uses: drumandbytes/reusable-actions/.github/workflows/indexnow.yml@v1
     with:
       host: drumandbytes.ee
