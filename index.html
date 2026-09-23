@@ -139,6 +139,8 @@
     }
     .project p { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.92rem; }
     .project.multi .project-head strong { font-weight: 600; font-size: 0.95rem; }
+    .project.multi strong a { color: inherit; text-decoration-color: var(--line); }
+    .project.multi strong a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 
     .support {
       margin-top: 2.75rem;
@@ -205,13 +207,18 @@
         <div class="project-head"><strong>razer-pod-bridge</strong><span class="tag">Firmware</span></div>
         <p>Turns a Razer Wireless Control Pod into a plug-and-play USB media controller for macOS, no Razer Synapse required.</p>
       </a>
-      <a class="project multi" href="https://github.com/orgs/drumandbytes/repositories">
+      <div class="project multi">
         <div class="project-head">
-          <strong>pve-metrics-exporter · opentofu-updater-action · argocd-gitops-updater-action · github-actions-runner-exporter</strong>
+          <strong>
+            <a href="https://github.com/drumandbytes/pve-metrics-exporter">pve-metrics-exporter</a> ·
+            <a href="https://github.com/drumandbytes/opentofu-updater-action">opentofu-updater-action</a> ·
+            <a href="https://github.com/drumandbytes/argocd-gitops-updater-action">argocd-gitops-updater-action</a> ·
+            <a href="https://github.com/drumandbytes/github-actions-runner-exporter">github-actions-runner-exporter</a>
+          </strong>
           <span class="tag">Actions</span>
         </div>
         <p>Smaller open-source tools — Proxmox and GitHub Actions runner metrics, and GitHub Actions for keeping OpenTofu/Terraform and GitOps repos up to date.</p>
-      </a>
+      </div>
     </div>
 
     <div class="support">
