@@ -12,18 +12,27 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Read-only token; no job here writes to the repo or reads other scopes.
+permissions:
+  contents: read
+
 jobs:
   # Static HTML/CSS, no build step — this just catches committed secrets and
   # keeps the repo on the same CI baseline as everything else in the org.
   security:
     uses: drumandbytes/reusable-actions/.github/workflows/security-scan.yml@v1
 
+  # Audit of this repo's own workflows; accepted findings are in
+  # .github/zizmor.yml.
+  zizmor:
+    uses: drumandbytes/reusable-actions/.github/workflows/zizmor.yml@v1
+
   # Single stable name for the org's required-status-check ruleset to point
   # at, regardless of how the real jobs above are split or renamed.
   required-checks-passed:
     name: Required checks passed
     runs-on: ubuntu-latest
-    needs: [security]
+    needs: [security, zizmor]
     if: always()
     steps:
       - if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
