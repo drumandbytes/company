@@ -1,8 +1,6 @@
 name: Security
 
-# CI already scans every PR branch (the scan is its only job), but nothing
-# re-scanned main, so an advisory published after a merge went unnoticed
-# until the next push. This is that weekly run.
+# CI scans every PR; this weekly run catches advisories published after merge.
 on:
   schedule:
     - cron: '0 6 * * 1'
