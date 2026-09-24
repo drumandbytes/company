@@ -1,0 +1,16 @@
+name: Security
+
+# CI already scans every PR branch (the scan is its only job), but nothing
+# re-scanned main, so an advisory published after a merge went unnoticed
+# until the next push. This is that weekly run.
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  security:
+    uses: drumandbytes/reusable-actions/.github/workflows/security-scan.yml@v1
