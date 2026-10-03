@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy — Drumandbytes OÜ</title>
+  <meta name="description" content="What drumandbytes.ee collects: aggregate, cookieless visitor counts and nothing else.">
+  <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://drumandbytes.ee/privacy/">
+  <link rel="icon" href="../assets/logo.png" type="image/png">
+
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --card: #ffffff;
+      --fg: #1a1b1e;
+      --muted: #67666f;
+      --line: #e6e2db;
+      --accent: #ff6633;
+      --accent-soft: rgba(255, 102, 51, 0.12);
+      --chip-bg: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111318;
+        --card: #191b21;
+        --fg: #eeeef0;
+        --muted: #9a9ba5;
+        --line: #2a2c34;
+        --accent: #ff8a5c;
+        --accent-soft: rgba(255, 138, 92, 0.14);
+        --chip-bg: #f3f1ec;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(560px 320px at 15% -10%, var(--accent-soft), transparent 70%),
+        var(--bg);
+      color: var(--fg);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    main {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 4.5rem 1.5rem 3rem;
+    }
+    .id { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.1rem; }
+    .id .mark {
+      width: 56px;
+      height: 56px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      background: var(--chip-bg);
+      border-radius: 16px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+    .id img { width: 34px; height: 34px; display: block; }
+    h1 { font-size: 1.85rem; letter-spacing: -0.01em; margin: 0; }
+    .lede {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 34rem;
+      margin: 0 0 2.75rem;
+    }
+    .lede a { color: var(--fg); text-decoration-color: var(--line); }
+    h2 {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 2.75rem 0 1rem;
+    }
+    .projects { display: grid; gap: 0.7rem; }
+    .project {
+      display: block;
+      padding: 1.1rem 1.2rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .project:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .project-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+    .project-head strong { font-size: 1.02rem; }
+    .tag {
+      flex: none;
+      font: 600 0.68rem/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.3rem 0.5rem;
+      border-radius: 6px;
+    }
+    .project p { margin: 0.35rem 0 0; color: var(--muted); font-size: 0.92rem; }
+    .project.multi .project-head strong { font-weight: 600; font-size: 0.95rem; }
+    .project.multi strong a { color: inherit; text-decoration-color: var(--line); }
+    .project.multi strong a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+
+    .support {
+      margin-top: 2.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem 1.25rem;
+      color: var(--muted);
+    }
+    .support a { color: var(--fg); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line); }
+    .support a:hover { color: var(--accent); border-color: var(--accent); }
+    .support .sponsor { color: var(--accent); border-color: transparent; }
+
+    footer {
+      margin-top: 3rem;
+      padding: 1.25rem 1.2rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer .legal-name { color: var(--fg); font-weight: 600; }
+    footer code {
+      font: 0.85em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--fg);
+    }
+    footer a { color: inherit; }
+    .credit { margin-top: 1.1rem; font-size: 0.72rem; opacity: 0.6; }
+    .credit a { color: inherit; }
+    article h2 { margin-top: 2rem; }
+    article p, article li { line-height: 1.6; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; }
+    .back { font-size: 0.9rem; }
+  </style>
+</head>
+
+<body>
+  <main>
+    <p class="back"><a href="../">← Drumandbytes OÜ</a></p>
+    <article>
+      <h1>Privacy</h1>
+      <p class="lede">This page covers drumandbytes.ee only. Each app and project has its own policy on its own site.</p>
+
+      <h2>What this website collects</h2>
+      <p>
+        drumandbytes.ee is a single static page. There are no accounts, forms, cookies or tracking scripts of ours.
+        Cloudflare sits in front of the site and keeps two kinds of aggregate counts:
+      </p>
+      <ul>
+        <li><strong>Page views</strong> (Cloudflare Web Analytics): which pages get visited, roughly how many times, and referrers.</li>
+        <li><strong>Referrals</strong>: which site or link sent a visit, meaning the referring site's name (or a short tag we add to our own links) and the page path, without the query string. Kept for three months.</li>
+      </ul>
+      <p>
+        Neither sets cookies, uses a cross-site identifier, or stores your IP address. There's no way for us to
+        single you out in them, which is why there's no cookie banner.
+      </p>
+
+      <h2>Who is involved</h2>
+      <table>
+        <thead><tr><th>Who</th><th>What they see</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>GitHub (Pages)</td><td>Your IP address and request headers, as any web server does</td><td>Hosting the page</td></tr>
+          <tr><td>Cloudflare</td><td>Your IP address and request headers, as any web server does</td><td>Delivering the site, security, aggregate visitor counts</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Lawful basis</h2>
+      <p>
+        Aggregate, cookieless counting on a public site: legitimate interest, GDPR Article 6(1)(f). Knowing roughly
+        how many people find the company, and from where, is proportionate, and it can't identify anyone.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        We hold no personal data about you from this website. Nothing is stored beyond the aggregate counts and
+        whatever the providers above keep in their own logs, so there's nothing of yours for us to export or delete.
+        If you think we've got this wrong, you can complain to the
+        <a href="https://www.aki.ee/">Estonian Data Protection Inspectorate</a> or your national authority.
+      </p>
+
+      <h2>Who is responsible</h2>
+      <p>
+        Drumandbytes OÜ (registry code 17599202), Uus-Sadama tn 21-207, 10120 Tallinn, Estonia.
+        Write to <a href="mailto:privacy@drumandbytes.com">privacy@drumandbytes.com</a> about anything on this page.
+      </p>
+      <p class="credit">Last updated 3 October 2026.</p>
+    </article>
+  </main>
+</body>
+</html>
