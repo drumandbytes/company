@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://drumandbytes.ee/sitemap.xml
+Sitemap: https://roadconditions.drumandbytes.ee/sitemap.xml
