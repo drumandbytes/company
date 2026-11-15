@@ -58,7 +58,7 @@
       --fg: #1a1b1e;
       --muted: #67666f;
       --line: #e6e2db;
-      --al: 60%;
+      --al: 60%; --tl: 26%;
       --chip-bg: #ffffff;
     }
     @media (prefers-color-scheme: dark) {
@@ -68,17 +68,17 @@
         --fg: #eeeef0;
         --muted: #9a9ba5;
         --line: #2a2c34;
-        --al: 68%;
+        --al: 68%; --tl: 72%;
         --chip-bg: #f3f1ec;
       }
     }
     :root[data-theme="dark"] {
       --bg: #111318; --card: #191b21; --fg: #eeeef0; --muted: #9a9ba5; --line: #2a2c34;
-      --al: 68%; --chip-bg: #f3f1ec;
+      --al: 68%; --tl: 72%; --chip-bg: #f3f1ec;
     }
     :root[data-theme="light"] {
       --bg: #faf8f5; --card: #ffffff; --fg: #1a1b1e; --muted: #67666f; --line: #e6e2db;
-      --al: 60%; --chip-bg: #ffffff;
+      --al: 60%; --tl: 26%; --chip-bg: #ffffff;
     }
     * { box-sizing: border-box; }
     body {
@@ -156,7 +156,7 @@
       font: 600 0.68rem/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--a, var(--accent));
+      color: hsl(var(--ch, 15) 90% var(--tl));
       background: var(--as, var(--accent-soft));
       padding: 0.3rem 0.5rem;
       border-radius: 6px;
@@ -207,7 +207,9 @@
     }
     .theme:hover { color: var(--accent); border-color: var(--accent); }
     .id .mark { transition: transform 0.35s cubic-bezier(.3, 1.6, .5, 1); cursor: pointer; border: 0; padding: 0; }
-    .id .mark:hover { transform: rotate(-8deg) scale(1.08); }
+    @media (hover: hover) { .id .mark:hover { transform: rotate(-8deg) scale(1.08); } }
+    .id .mark[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--accent), 0 6px 16px rgba(0, 0, 0, 0.08); }
+    .id .mark { -webkit-tap-highlight-color: transparent; }
 
     .tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 1rem; }
     .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
@@ -324,9 +326,10 @@
     .palette .none { padding: 0.8rem 1.2rem; color: var(--muted); }
 
     .copy {
-      font: inherit; font-weight: 600; color: var(--fg);
-      background: none; border: 0; border-bottom: 1px solid var(--line);
-      padding: 0; cursor: pointer;
+      font: inherit; font-size: 0.75rem; line-height: 1; color: var(--muted);
+      background: none; border: 1px solid var(--line); border-radius: 999px;
+      padding: 0.25rem 0.6rem; margin-left: 0.4rem; cursor: pointer;
+      transition: color 0.15s ease, border-color 0.15s ease;
     }
     .copy:hover { color: var(--accent); border-color: var(--accent); }
 
@@ -638,10 +641,14 @@
     const stop = () => { clearInterval(timer); timer = null; mark.setAttribute('aria-pressed', 'false'); };
     mark.addEventListener('click', () => {
       if (timer) return stop();
+      // iOS: the ringer switch mutes Web Audio unless the session is 'playback'
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (_) {}
       ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
       ctx.resume(); step = 0;
+      play(); // first hit inside the tap so iOS unlocks audio
       timer = setInterval(play, 60000 / 174 / 4);
       mark.setAttribute('aria-pressed', 'true');
+      mark.blur();
     });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && timer) stop(); });
 
