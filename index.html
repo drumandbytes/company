@@ -618,12 +618,13 @@
     const mark = $('.id .mark');
     const ms = 'mediaSession' in navigator ? navigator.mediaSession : null;
     const MINOR = [0, 3, 5, 7, 10, 12];
+    // five genres that differ in tempo, drum feel, bass voice and what sits on top
     const VIBES = [
-      { name: 'Rollers', art: 'sliders', bpm: [172, 174], root: 43.65, kick: [0, 10], kickExtra: 0.3, ghost: 0.25, hat: 2, bassProb: 0.25, pad: false },
-      { name: 'Jump Up', art: 'drum', bpm: [174, 176], root: 49, kick: [0, 10], kickExtra: 0.6, ghost: 0.1, hat: 2, bassProb: 0.6, pad: false },
-      { name: 'Liquid', art: 'notes', bpm: [170, 172], root: 41.2, kick: [0, 10], kickExtra: 0.2, ghost: 0.45, hat: 1, bassProb: 0.15, pad: true },
-      { name: 'Neurofunk', art: 'speaker', bpm: [172, 174], root: 38.89, kick: [0, 10], kickExtra: 0.35, ghost: 0.1, hat: 2, bassProb: 0.55, pad: false },
-      { name: 'Techstep', art: 'knobs', bpm: [172, 174], root: 46.25, kick: [0, 10, 11], kickExtra: 0.4, ghost: 0.15, hat: 2, bassProb: 0.45, pad: false },
+      { name: 'Jungle', art: 'drum', bpm: [160, 166], root: 43.65, kick: [0, 10], kickExtra: 0.5, snare: [4, 12], ghost: 0.6, ghostSteps: [2, 3, 6, 7, 9, 11, 14, 15], hat: 1, hatVol: 0.08, open: 0, bass: 'sine', bassProb: 0.08, kickVol: 0.8, snareVol: 0.6, snareF: 2200 },
+      { name: 'Jump Up', art: 'speaker', bpm: [174, 176], root: 49, kick: [0, 10], kickExtra: 0.4, snare: [4, 12], ghost: 0, ghostSteps: [], hat: 2, hatVol: 0.16, open: 0.8, bass: 'wobble', bassProb: 0.6, stabs: true, kickVol: 1, snareVol: 0.8, snareF: 1500 },
+      { name: 'Liquid', art: 'notes', bpm: [170, 172], root: 41.2, kick: [0, 9], kickExtra: 0.2, snare: [4, 12], ghost: 0.35, ghostSteps: [3, 7, 11, 15], hat: 2, hatVol: 0.07, open: 0.3, bass: 'sine', bassProb: 0.15, pad: true, arp: 0.5, kickVol: 0.6, snareVol: 0.3, snareF: 1200 },
+      { name: 'Neurofunk', art: 'knobs', bpm: [172, 174], root: 38.89, kick: [0, 10], kickExtra: 0.3, snare: [4, 12], ghost: 0.1, ghostSteps: [7, 15], hat: 4, hatVol: 0.1, open: 0, bass: 'reese', bassProb: 0.5, click: true, kickVol: 1, snareVol: 0.9, snareF: 2600 },
+      { name: 'Halftime', art: 'sliders', bpm: [168, 172], root: 36.71, kick: [0, 14], kickExtra: 0.2, snare: [8], ghost: 0.15, ghostSteps: [11, 15], hat: 4, hatVol: 0.1, open: 0.5, bass: 'dub', bassProb: 0.05, kickVol: 0.9, snareVol: 0.85, snareF: 900 },
     ];
     const rng = (a) => () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
     let ctx, master, noiseBuf, timer, tr, last = -1, bar = 0, step = 0, nextT = 0, trackStart = 0;
@@ -640,11 +641,12 @@
       const chord = [0, 3, 7].map((d) => v.root * 4 * 2 ** (d / 12));
       const pats = Array.from({ length: bars }, (_, b) => {
         const brk = b >= bars - 8 && b < bars - 4, fill = b % 4 === 3 && !brk;
-        const kick = new Set(brk ? [] : v.kick), snare = new Set(brk ? [] : [4, 12]), ghost = new Set();
+        const kick = new Set(brk ? [] : v.kick), snare = new Set(brk ? [] : v.snare), ghost = new Set();
         if (!brk && r() < v.kickExtra) kick.add([7, 13, 14, 15][Math.floor(r() * 4)]);
-        if (!brk) for (const g of [3, 7, 9, 15]) if (r() < v.ghost) ghost.add(g);
+        if (!brk) for (const g of v.ghostSteps) if (r() < v.ghost) ghost.add(g);
         if (fill) for (const f of [13, 14, 15]) if (r() < 0.7) snare.add(f);
-        return { kick, snare, ghost, brk, intro: b < 4, open: r() < 0.5 };
+        const arp = Array.from({ length: 16 }, (_, s) => (v.arp && s % 2 === 0 && r() < v.arp ? v.root * 8 * 2 ** (MINOR[Math.floor(r() * MINOR.length)] / 12) : 0));
+        return { kick, snare, ghost, brk, intro: b < 4, open: r() < v.open, stab: r() < 0.6, arp };
       });
       return { v, bpm, bars, sd: 60 / bpm / 4, bass, chord, pats };
     };
@@ -671,11 +673,37 @@
       o.type = type; o.frequency.setValueAtTime(f0, t); if (f1) o.frequency.exponentialRampToValueAtTime(f1, t + dur * 0.4);
       env(g, t, vol, dur); o.connect(g).connect(master); o.start(t); o.stop(t + dur);
     };
-    const sub = (t, f, dur) => {
+    const swell = (g, t, peak, dur) => { g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(peak, t + 0.015); g.gain.setTargetAtTime(0.0001, t + dur * 0.8, 0.05); };
+    // clean sub: long, round (jungle, liquid)
+    const sineSub = (t, f, dur) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine'; o.frequency.value = f; swell(g, t, 0.7, dur);
+      o.connect(g).connect(master); o.start(t); o.stop(t + dur + 0.3);
+    };
+    // filtered saw whose cutoff is moved by an LFO: wobble (jump up) or slow dub sweep (halftime)
+    const wobble = (t, f, dur, rate) => {
+      const o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), g = ctx.createGain(), lfo = ctx.createOscillator(), depth = ctx.createGain();
+      o.type = 'sawtooth'; o.frequency.value = f; lp.type = 'lowpass'; lp.frequency.value = 350; lp.Q.value = 9;
+      lfo.frequency.value = rate; depth.gain.value = 320; lfo.connect(depth).connect(lp.frequency);
+      swell(g, t, 0.4, dur);
+      o.connect(lp).connect(g).connect(master); o.start(t); lfo.start(t); o.stop(t + dur + 0.3); lfo.stop(t + dur + 0.3);
+    };
+    // two detuned saws with a sweeping filter: the neurofunk reese
+    const reese = (t, f, dur) => {
+      const lp = ctx.createBiquadFilter(), g = ctx.createGain();
+      lp.type = 'lowpass'; lp.Q.value = 7; lp.frequency.setValueAtTime(120, t); lp.frequency.linearRampToValueAtTime(900, t + dur * 0.5); lp.frequency.linearRampToValueAtTime(180, t + dur);
+      swell(g, t, 0.3, dur); lp.connect(g).connect(master);
+      [-14, 14].forEach((c) => { const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = c; o.connect(lp); o.start(t); o.stop(t + dur + 0.3); });
+    };
+    const stab = (t, freqs) => freqs.forEach((f) => {
       const o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
-      o.type = 'sawtooth'; o.frequency.value = f; lp.type = 'lowpass'; lp.frequency.value = 160;
-      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(0.42, t + 0.015); g.gain.setTargetAtTime(0.0001, t + dur * 0.8, 0.05);
-      o.connect(lp).connect(g).connect(master); o.start(t); o.stop(t + dur + 0.3);
+      o.type = 'square'; o.frequency.value = f * 2; lp.type = 'lowpass'; lp.frequency.value = 2600; env(g, t, 0.07, 0.16);
+      o.connect(lp).connect(g).connect(master); o.start(t); o.stop(t + 0.2);
+    });
+    const pluck = (t, f) => {
+      const o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
+      o.type = 'triangle'; o.frequency.value = f; lp.type = 'lowpass'; lp.frequency.value = 3200; env(g, t, 0.1, 0.35);
+      o.connect(lp).connect(g).connect(master); o.start(t); o.stop(t + 0.4);
     };
     const pad = (t, freqs, dur) => freqs.forEach((f) => {
       const o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
@@ -686,13 +714,21 @@
     const thump = () => { if (timer) mark.animate([{ transform: 'scale(1.14)' }, { transform: 'scale(1)' }], { duration: 160 }); };
 
     const hit = (t) => {
-      const p = tr.pats[bar], s = step, v = tr.v;
-      if (p.kick.has(s)) { tone(t, 'sine', 160, 45, 0.3, 0.95); setTimeout(thump, Math.max(0, (t - ctx.currentTime) * 1000)); }
-      if (p.snare.has(s)) { noise(t, 0.18, 'bandpass', 1800, 0.55); tone(t, 'triangle', 200, 140, 0.1, 0.3); }
-      if (p.ghost.has(s)) noise(t, 0.06, 'bandpass', 2200, 0.12);
-      if (s % v.hat === 0) noise(t, p.open && (s === 6 || s === 14) ? 0.14 : 0.035, 'highpass', 7500, p.brk ? 0.08 : (s % 4 === 2 ? 0.2 : 0.12));
-      if (!p.intro && !p.brk) { const n = tr.bass[(bar % 2) * 16 + s]; if (n) sub(t, n.f, n.len * tr.sd); }
-      if (v.pad && s === 0 && bar % 2 === 0) pad(t, tr.chord, tr.sd * 32);
+      const p = tr.pats[bar], s = step, v = tr.v, sd = tr.sd;
+      if (p.kick.has(s)) { tone(t, 'sine', 160, 45, 0.3, 0.95 * v.kickVol); setTimeout(thump, Math.max(0, (t - ctx.currentTime) * 1000)); }
+      if (p.snare.has(s)) {
+        noise(t, v.name === 'Halftime' ? 0.3 : 0.18, 'bandpass', v.snareF, 0.55 * v.snareVol); tone(t, 'triangle', 200, 140, 0.1, 0.3 * v.snareVol);
+        if (v.click) noise(t, 0.03, 'highpass', 6000, 0.3);
+      }
+      if (p.ghost.has(s)) noise(t, 0.06, 'bandpass', v.snareF * 1.2, 0.12);
+      if (s % v.hat === 0) noise(t, p.open && (s === 6 || s === 14) ? 0.14 : 0.035, 'highpass', 7500, (p.brk ? 0.5 : 1) * v.hatVol * (s % 4 === 2 ? 1.6 : 1));
+      if (!p.intro && !p.brk) {
+        const n = tr.bass[(bar % 2) * 16 + s], d = n && n.len * sd;
+        if (n) { if (v.bass === 'sine') sineSub(t, n.f, d); else if (v.bass === 'wobble') wobble(t, n.f, d, 1 / (2 * sd)); else if (v.bass === 'reese') reese(t, n.f, d); else wobble(t, n.f, d, 1 / (8 * sd)); }
+        if (v.stabs && p.stab && (s === 6 || s === 14)) stab(t, tr.chord);
+      }
+      if (p.arp[s]) pluck(t, p.arp[s]);
+      if (v.pad && s === 0 && bar % 2 === 0) pad(t, tr.chord, sd * 32);
     };
     const pump = () => {
       while (nextT < ctx.currentTime + 0.15) {
