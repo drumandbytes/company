@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Drumandbytes OÜ — open-source apps from Tallinn, Estonia</title>
 
-  <meta name="description" content="Drumandbytes OÜ — the Estonian company behind Eraser, Teesilm, F1 Circuit Walks, Mystery Games, Rows to Riches and the drumandbytes open-source tools.">
+  <meta name="description" content="Drumandbytes OÜ — the Estonian company behind delistd, Teesilm, F1 Circuit Walks, Mystery Games, Rows to Riches and the drumandbytes open-source tools.">
   <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://drumandbytes.ee/">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Drumandbytes OÜ — open-source apps from Tallinn, Estonia">
-  <meta property="og:description" content="The Estonian company behind Eraser, Teesilm, F1 Circuit Walks, Mystery Games, Rows to Riches and the drumandbytes open-source tools.">
+  <meta property="og:description" content="The Estonian company behind delistd, Teesilm, F1 Circuit Walks, Mystery Games, Rows to Riches and the drumandbytes open-source tools.">
   <meta property="og:url" content="https://drumandbytes.ee/">
   <meta property="og:image" content="https://drumandbytes.ee/assets/logo.png">
   <meta name="twitter:card" content="summary">
@@ -44,15 +44,21 @@
   }
   </script>
 
+  <script>document.documentElement.classList.add("js")</script>
   <style>
+    @property --px { syntax: "<percentage>"; inherits: true; initial-value: 15%; }
+    @property --py { syntax: "<percentage>"; inherits: true; initial-value: -10%; }
+    :root {
+      --accent: hsl(15 100% var(--al));
+      --accent-soft: hsl(15 100% var(--al) / 0.13);
+    }
     :root {
       --bg: #faf8f5;
       --card: #ffffff;
       --fg: #1a1b1e;
       --muted: #67666f;
       --line: #e6e2db;
-      --accent: #ff6633;
-      --accent-soft: rgba(255, 102, 51, 0.12);
+      --al: 60%;
       --chip-bg: #ffffff;
     }
     @media (prefers-color-scheme: dark) {
@@ -62,22 +68,33 @@
         --fg: #eeeef0;
         --muted: #9a9ba5;
         --line: #2a2c34;
-        --accent: #ff8a5c;
-        --accent-soft: rgba(255, 138, 92, 0.14);
+        --al: 68%;
         --chip-bg: #f3f1ec;
       }
+    }
+    :root[data-theme="dark"] {
+      --bg: #111318; --card: #191b21; --fg: #eeeef0; --muted: #9a9ba5; --line: #2a2c34;
+      --al: 68%; --chip-bg: #f3f1ec;
+    }
+    :root[data-theme="light"] {
+      --bg: #faf8f5; --card: #ffffff; --fg: #1a1b1e; --muted: #67666f; --line: #e6e2db;
+      --al: 60%; --chip-bg: #ffffff;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      background:
-        radial-gradient(560px 320px at 15% -10%, var(--accent-soft), transparent 70%),
-        var(--bg);
+      background: var(--bg);
       color: var(--fg);
       font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
+    body::before {
+      content: "";
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background: radial-gradient(620px 360px at var(--px) var(--py), var(--accent-soft), transparent 70%);
+      transition: --px 0.9s ease-out, --py 0.9s ease-out;
+    }
     main {
-      max-width: 640px;
+      max-width: 880px;
       margin: 0 auto;
       padding: 4.5rem 1.5rem 3rem;
     }
@@ -109,6 +126,12 @@
       margin: 2.75rem 0 1rem;
     }
     .projects { display: grid; gap: 0.7rem; }
+    @media (min-width: 760px) {
+      .projects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .projects > .empty, .project.multi { grid-column: 1 / -1; }
+      .project { display: flex; flex-direction: column; }
+      .project .stats { margin-top: auto; padding-top: 0.6rem; }
+    }
     .project {
       display: block;
       padding: 1.1rem 1.2rem;
@@ -119,7 +142,8 @@
       color: inherit;
       transition: border-color 0.15s ease, transform 0.15s ease;
     }
-    .project:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .project { --ch: 15; --a: hsl(var(--ch) 100% var(--al)); --as: hsl(var(--ch) 100% var(--al) / 0.13); }
+    .project:hover { border-color: var(--a); transform: translateY(-1px); }
     .project-head {
       display: flex;
       align-items: baseline;
@@ -132,8 +156,8 @@
       font: 600 0.68rem/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--accent);
-      background: var(--accent-soft);
+      color: var(--a, var(--accent));
+      background: var(--as, var(--accent-soft));
       padding: 0.3rem 0.5rem;
       border-radius: 6px;
     }
@@ -171,63 +195,241 @@
     footer a { color: inherit; }
     .credit { margin-top: 1.1rem; font-size: 0.72rem; opacity: 0.6; }
     .credit a { color: inherit; }
+
+    /* interactivity */
+    html { scroll-behavior: smooth; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+    .theme {
+      margin-left: auto; width: 36px; height: 36px; display: grid; place-items: center;
+      font: inherit; font-size: 1rem; color: var(--muted); background: var(--card);
+      border: 1px solid var(--line); border-radius: 50%; cursor: pointer;
+      transition: color 0.15s ease, border-color 0.15s ease;
+    }
+    .theme:hover { color: var(--accent); border-color: var(--accent); }
+    .id .mark { transition: transform 0.35s cubic-bezier(.3, 1.6, .5, 1); cursor: pointer; border: 0; padding: 0; }
+    .id .mark:hover { transform: rotate(-8deg) scale(1.08); }
+
+    .tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin: 0 0 1rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .chip {
+      font: 600 0.82rem/1 inherit;
+      font-family: inherit;
+      color: var(--muted);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.5rem 0.8rem;
+      cursor: pointer;
+      transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .chip:hover { color: var(--fg); border-color: var(--accent); }
+    .chip[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); border-color: var(--accent); }
+    .search { position: relative; margin-left: auto; flex: 1 1 11rem; max-width: 15rem; }
+    .search input {
+      width: 100%;
+      font: inherit;
+      font-size: 0.88rem;
+      color: var(--fg);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 0.45rem 2.2rem 0.45rem 0.9rem;
+      transition: border-color 0.15s ease;
+    }
+    .search input::placeholder { color: var(--muted); }
+    .search input:hover { border-color: var(--accent); }
+    .search kbd {
+      position: absolute; right: 0.55rem; top: 50%; transform: translateY(-50%);
+      font: 0.72rem/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 0.2rem 0.4rem;
+      pointer-events: none;
+    }
+    .search input:focus ~ kbd { opacity: 0; }
+    .now {
+      display: flex; flex-wrap: wrap; gap: 0.2rem 1.1rem;
+      margin: -1.6rem 0 2.2rem;
+      font: 0.8rem/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--muted);
+    }
+    .now b { color: var(--accent); font-weight: 600; }
+    .hint { display: none; margin: 1rem 0 0; font-size: 0.8rem; color: var(--muted); }
+    .hint kbd { font: 0.95em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--fg); border: 1px solid var(--line); border-radius: 4px; padding: 0.05rem 0.3rem; }
+    @media (hover: hover) { .hint { display: block; } }
+    .empty { margin: 1rem 0; color: var(--muted); }
+
+    .project { position: relative; overflow: hidden; isolation: isolate; }
+    .project::before {
+      content: "";
+      position: absolute; inset: 0; z-index: -1;
+      background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), var(--as), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .project:hover::before { opacity: 1; }
+    a.project .project-head strong::after {
+      content: "↗";
+      display: inline-block;
+      margin-left: 0.4rem;
+      color: var(--a);
+      opacity: 0;
+      transform: translate(-4px, 4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    a.project:hover .project-head strong::after,
+    a.project:focus-visible .project-head strong::after { opacity: 1; transform: none; }
+    .project[hidden] { display: none; }
+    .stats {
+      display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem;
+      margin-top: 0.6rem;
+      font: 0.74rem/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--muted);
+    }
+    .stats:empty { display: none; }
+    .stats .fresh { color: var(--accent); }
+
+    .activity .summary { margin: 0 0 1.25rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.3rem 1.25rem; color: var(--muted); }
+    .activity .summary b { color: var(--fg); font-size: 1.6rem; letter-spacing: -0.01em; }
+    .activity .summary a { color: var(--accent); font-weight: 600; text-decoration: none; }
+    .activity .summary a:hover { text-decoration: underline; }
+    .panels { display: grid; gap: 1.25rem; }
+    @media (min-width: 760px) { .panels { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.2rem; }
+    .panel h3 { margin: 0 0 0.8rem; font-size: 0.85rem; font-weight: 600; color: var(--muted); }
+    .bars, .feed { list-style: none; margin: 0; padding: 0; }
+    .bars li { display: grid; grid-template-columns: minmax(0, 9rem) 1fr 2rem; align-items: center; gap: 0.6rem; margin: 0.45rem 0; font-size: 0.85rem; }
+    .bars .n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bars .track { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+    .bars .fill { display: block; height: 100%; background: var(--accent); border-radius: 4px; transform-origin: left; transform: scaleX(var(--w)); }
+    .bars .v { text-align: right; color: var(--muted); font: 0.78rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .feed li { display: flex; justify-content: space-between; gap: 1rem; margin: 0.45rem 0; font-size: 0.85rem; }
+    .feed a { color: var(--fg); text-decoration: none; }
+    .feed a:hover { color: var(--accent); }
+    .feed span { color: var(--muted); font: 0.78rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; text-align: right; }
+    .panel .none { color: var(--muted); font-size: 0.85rem; margin: 0; }
+
+    .palette {
+      border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--fg);
+      padding: 0; width: min(560px, calc(100vw - 2rem)); margin: 12vh auto 0;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    .palette::backdrop { background: rgba(0, 0, 0, 0.4); }
+    .palette input {
+      width: 100%; font: inherit; font-size: 1rem; color: var(--fg); background: none;
+      border: 0; border-bottom: 1px solid var(--line); padding: 1rem 1.2rem; outline: none;
+    }
+    .palette ul { list-style: none; margin: 0; padding: 0.4rem; max-height: 50vh; overflow: auto; }
+    .palette li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0.8rem; border-radius: 8px; cursor: pointer; font-size: 0.92rem; }
+    .palette li span:last-child { color: var(--muted); font-size: 0.78rem; }
+    .palette li[aria-selected="true"] { background: var(--accent-soft); }
+    .palette .none { padding: 0.8rem 1.2rem; color: var(--muted); }
+
+    .copy {
+      font: inherit; font-weight: 600; color: var(--fg);
+      background: none; border: 0; border-bottom: 1px solid var(--line);
+      padding: 0; cursor: pointer;
+    }
+    .copy:hover { color: var(--accent); border-color: var(--accent); }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .id, .lede, .now { animation: rise 0.5s ease both; }
+      .lede { animation-delay: 0.05s; }
+      .now { animation-delay: 0.1s; }
+      @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .project, .id .mark, a.project .project-head strong::after { transition: none; }
+    }
   </style>
 </head>
 
 <body>
   <main>
     <div class="id">
-      <span class="mark"><img src="assets/logo.png" alt=""></span>
+      <button class="mark" type="button" aria-label="Play a drum and bass beat" aria-pressed="false" title="Click for a beat"><img src="assets/logo.png" alt=""></button>
       <h1>Drumandbytes OÜ</h1>
+      <button class="theme" type="button" aria-label="Toggle light/dark theme" hidden>◐</button>
     </div>
     <p class="lede">
       One person, a handful of open-source projects and apps, published under
       <a href="https://github.com/drumandbytes">github.com/drumandbytes</a>.
     </p>
 
+    <p class="now" hidden></p>
+
     <h2>Projects</h2>
+    <div class="tools" hidden>
+      <div class="chips" role="group" aria-label="Filter projects">
+        <button class="chip" type="button" data-f="all" aria-pressed="true">All</button>
+        <button class="chip" type="button" data-f="app" aria-pressed="false">Apps</button>
+        <button class="chip" type="button" data-f="game" aria-pressed="false">Games</button>
+        <button class="chip" type="button" data-f="tool" aria-pressed="false">Tools</button>
+        <button class="chip" type="button" data-sort aria-pressed="false" hidden>Newest first</button>
+      </div>
+      <label class="search">
+        <span class="sr" style="position:absolute;left:-9999px">Search projects</span>
+        <input type="search" placeholder="Search" autocomplete="off">
+        <kbd aria-hidden="true">/</kbd>
+      </label>
+    </div>
     <div class="projects">
-      <a class="project" href="https://eraser.drumandbytes.dev/">
-        <div class="project-head"><strong>Eraser</strong><span class="tag">CLI</span></div>
+      <p class="empty" hidden>No projects match.</p>
+      <a class="project" data-h="15" data-cat="app" data-repo="delistd" href="https://delistd.dev/">
+        <div class="project-head"><strong>delistd</strong><span class="tag">Self-hosted</span></div>
         <p>Free, open-source data-broker removal — GDPR/CCPA opt-out requests, sent from your own mailbox.</p>
       </a>
-      <a class="project" href="https://roadconditions.drumandbytes.ee/">
+      <a class="project" data-h="205" data-cat="app" href="https://roadconditions.drumandbytes.ee/">
         <div class="project-head"><strong>Teesilm</strong><span class="tag">PWA</span></div>
         <p>Mobile-first PWA for Estonian road and weather conditions.</p>
       </a>
-      <a class="project" href="https://f1walk.drumandbytes.dev/">
+      <a class="project" data-h="355" data-cat="app" data-repo="f1-walk" href="https://f1walk.drumandbytes.dev/">
         <div class="project-head"><strong>F1 Circuit Walks</strong><span class="tag">PWA</span></div>
         <p>Free walking guides to Formula 1 street circuits, with GPS tracking and offline support.</p>
       </a>
-      <a class="project" href="https://mystery.drumandbytes.dev/">
+      <a class="project" data-h="280" data-cat="game" href="https://mystery.drumandbytes.dev/">
         <div class="project-head"><strong>Mystery Games</strong><span class="tag">Game</span></div>
         <p>Detective dinner mysteries you can play at the table — no printing, no prep.</p>
       </a>
-      <a class="project" href="https://rowstoriches.drumandbytes.dev/">
+      <a class="project" data-h="45" data-cat="game" data-repo="rows-to-riches" href="https://rowstoriches.drumandbytes.dev/">
         <div class="project-head"><strong>Rows to Riches</strong><span class="tag">Game</span></div>
         <p>An idle game about data engineering and the corporate world around it — from one CSV on localhost to cataloging the universe.</p>
       </a>
-      <a class="project" href="https://github.com/drumandbytes/razer-pod-bridge">
+      <a class="project" data-h="150" data-cat="tool" data-repo="razer-pod-bridge" href="https://github.com/drumandbytes/razer-pod-bridge">
         <div class="project-head"><strong>razer-pod-bridge</strong><span class="tag">Firmware</span></div>
         <p>Turns a Razer Wireless Control Pod into a plug-and-play USB media controller for macOS, no Razer Synapse required.</p>
       </a>
-      <a class="project" href="https://github.com/drumandbytes/momentarr">
+      <a class="project" data-h="175" data-cat="tool" data-repo="momentarr" href="https://github.com/drumandbytes/momentarr">
         <div class="project-head"><strong>momentarr</strong><span class="tag">Homelab</span></div>
         <p>Caching proxy for Cloudflare solvers like FlareSolverr and Byparr — reuses clearances instead of re-solving, one browser at a time.</p>
       </a>
-      <div class="project multi">
-        <div class="project-head">
-          <strong>
-            <a href="https://github.com/drumandbytes/pve-metrics-exporter">pve-metrics-exporter</a> ·
-            <a href="https://github.com/drumandbytes/opentofu-updater-action">opentofu-updater-action</a> ·
-            <a href="https://github.com/drumandbytes/argocd-gitops-updater-action">argocd-gitops-updater-action</a> ·
-            <a href="https://github.com/drumandbytes/github-actions-runner-exporter">github-actions-runner-exporter</a>
-          </strong>
-          <span class="tag">Actions</span>
-        </div>
-        <p>Smaller open-source tools — Proxmox and GitHub Actions runner metrics, and GitHub Actions for keeping OpenTofu/Terraform and GitOps repos up to date.</p>
-      </div>
+      <a class="project" data-h="230" data-cat="tool" data-repo="pve-metrics-exporter" href="https://github.com/drumandbytes/pve-metrics-exporter">
+        <div class="project-head"><strong>pve-metrics-exporter</strong><span class="tag">Exporter</span></div>
+        <p>Proxmox VE metrics for Prometheus and Grafana.</p>
+      </a>
+      <a class="project" data-h="215" data-cat="tool" data-repo="github-actions-runner-exporter" href="https://github.com/drumandbytes/github-actions-runner-exporter">
+        <div class="project-head"><strong>github-actions-runner-exporter</strong><span class="tag">Exporter</span></div>
+        <p>Metrics for GitHub Actions runners, ready to scrape.</p>
+      </a>
+      <a class="project" data-h="100" data-cat="tool" data-repo="opentofu-updater-action" href="https://github.com/drumandbytes/opentofu-updater-action">
+        <div class="project-head"><strong>opentofu-updater-action</strong><span class="tag">Action</span></div>
+        <p>GitHub Action that keeps OpenTofu/Terraform repos up to date.</p>
+      </a>
+      <a class="project" data-h="25" data-cat="tool" data-repo="argocd-gitops-updater-action" href="https://github.com/drumandbytes/argocd-gitops-updater-action">
+        <div class="project-head"><strong>argocd-gitops-updater-action</strong><span class="tag">Action</span></div>
+        <p>GitHub Action that keeps Argo CD GitOps repos up to date.</p>
+      </a>
     </div>
+
+    <p class="hint"><kbd>⌘K</kbd> commands · <kbd>/</kbd> search · <kbd>j</kbd> <kbd>k</kbd> move · click the headphones for a beat</p>
+
+    <section class="activity" hidden>
+      <h2>In the open</h2>
+      <p class="summary"></p>
+      <div class="panels">
+        <div class="panel"><h3>Stars by project</h3><ol class="bars"></ol></div>
+        <div class="panel"><h3>Recently active</h3><ul class="feed"></ul></div>
+      </div>
+    </section>
 
     <div class="support">
       <span>Projects &amp; writing at <a href="https://drumandbytes.com/projects/">drumandbytes.com</a></span>
@@ -237,9 +439,265 @@
     <footer>
       <span class="legal-name">Drumandbytes OÜ</span> · registry code <code>17599202</code><br>
       Uus-Sadama tn 21-207, Kesklinna linnaosa, Tallinn, Harju maakond, 10120, Estonia<br>
-      <a href="mailto:maris@drumandbytes.com">maris@drumandbytes.com</a> · <a href="privacy/">Privacy</a>
+      <a href="mailto:maris@drumandbytes.com">maris@drumandbytes.com</a> <button class="copy" type="button" hidden aria-live="polite">Copy</button> · <a href="privacy/">Privacy</a>
       <div class="credit">Headphones mark: <a href="https://openmoji.org">OpenMoji</a> (CC BY-SA 4.0).</div>
     </footer>
   </main>
+
+  <dialog class="palette" aria-label="Command palette">
+    <input type="text" placeholder="Jump to a project or run a command" autocomplete="off" aria-label="Command">
+    <ul role="listbox"></ul>
+  </dialog>
+
+  <script>
+  (() => {
+    const $ = (q, r = document) => r.querySelector(q);
+    const $$ = (q, r = document) => [...r.querySelectorAll(q)];
+    const cards = $$('.project');
+    const grid = $('.projects');
+
+    const root = document.documentElement;
+    cards.forEach((c) => c.style.setProperty('--ch', c.dataset.h));
+    // ambient glow follows the pointer
+    if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+      addEventListener('pointermove', (e) => {
+        root.style.setProperty('--px', (e.clientX / innerWidth * 100).toFixed(1) + '%');
+        root.style.setProperty('--py', (e.clientY / innerHeight * 100).toFixed(1) + '%');
+      }, { passive: true });
+    }
+
+    // cursor spotlight
+    cards.forEach((c) => c.addEventListener('pointermove', (e) => {
+      const r = c.getBoundingClientRect();
+      c.style.setProperty('--mx', e.clientX - r.left + 'px');
+      c.style.setProperty('--my', e.clientY - r.top + 'px');
+    }));
+
+    // filter + search
+    const tools = $('.tools'), input = $('.search input'), chips = $$('.chip[data-f]'), sortBtn = $('[data-sort]'), empty = $('.empty');
+    tools.hidden = false;
+    let cat = 'all';
+    const apply = () => {
+      const q = input.value.trim().toLowerCase();
+      let n = 0;
+      cards.forEach((c) => {
+        const ok = (cat === 'all' || c.dataset.cat === cat) && (!q || c.textContent.toLowerCase().includes(q));
+        c.hidden = !ok;
+        if (ok) { n++; c.classList.add('in'); }
+      });
+      empty.hidden = n > 0;
+    };
+    const setCat = (f) => {
+      cat = chips.some((b) => b.dataset.f === f) ? f : 'all';
+      chips.forEach((x) => x.setAttribute('aria-pressed', x.dataset.f === cat));
+      history.replaceState(null, '', cat === 'all' ? location.pathname : '#' + cat);
+      apply();
+    };
+    chips.forEach((b) => b.addEventListener('click', () => setCat(b.dataset.f)));
+    setCat(location.hash.slice(1));
+    input.addEventListener('input', apply);
+    document.addEventListener('keydown', (e) => {
+      const t = e.target;
+      if (e.key === '/' && !e.metaKey && !e.ctrlKey && !/^(INPUT|TEXTAREA)$/.test(t.tagName)) { e.preventDefault(); input.focus(); }
+      else if ((e.key === 'j' || e.key === 'k') && !e.metaKey && !e.ctrlKey && !/^(INPUT|TEXTAREA)$/.test(t.tagName)) {
+        const list = $$('a.project').filter((c) => !c.hidden), i = list.indexOf(document.activeElement);
+        const next = list[e.key === 'j' ? Math.min(i + 1, list.length - 1) : Math.max(i - 1, 0)];
+        if (next) { e.preventDefault(); next.focus(); }
+      }
+      else if (e.key === 'Escape' && t === input) { input.value = ''; input.blur(); apply(); }
+    });
+
+    // live GitHub activity (best effort, cached 1h)
+    const ago = (d) => {
+      const hrs = Math.floor((Date.now() - new Date(d)) / 36e5), days = Math.floor(hrs / 24);
+      return hrs < 1 ? 'just now' : days < 1 ? hrs + 'h ago' : days < 31 ? days + 'd ago' : days < 365 ? Math.floor(days / 30) + 'mo ago' : Math.floor(days / 365) + 'y ago';
+    };
+    const listed = [];
+    cards.forEach((c) => {
+      if (c.dataset.repo) listed.push({ name: c.dataset.repo, label: $('strong', c).textContent.trim() });
+      else $$('a[href^="https://github.com/drumandbytes/"]', c).forEach((a) => listed.push({ name: a.getAttribute('href').split('/').pop(), label: a.textContent.trim() }));
+    });
+    const paint = (repos) => {
+      const by = Object.fromEntries(repos.map((r) => [r.name, r]));
+      cards.forEach((c) => {
+        const names = c.dataset.repo ? [c.dataset.repo]
+          : $$('a[href^="https://github.com/drumandbytes/"]', c).map((a) => a.getAttribute('href').split('/').pop());
+        const items = names.map((n) => by[n]).filter(Boolean);
+        if (!items.length) return;
+        const latest = items.map((r) => r.pushed_at).sort().pop();
+        const stars = items.reduce((s, r) => s + r.stargazers_count, 0);
+        c.dataset.pushed = latest;
+        const el = document.createElement('div');
+        el.className = 'stats';
+        const fresh = Date.now() - new Date(latest) < 30 * 864e5;
+        el.innerHTML = (stars ? '<span>★ ' + stars + '</span>' : '') + '<span class="' + (fresh ? 'fresh' : '') + '">updated ' + ago(latest) + '</span>';
+        c.appendChild(el);
+      });
+      sortBtn.hidden = false;
+      live(repos);
+    };
+    const now = $('.now');
+    const tallinn = () => new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Tallinn', hour: '2-digit', minute: '2-digit' }).format(new Date());
+    const nowParts = { clock: '', live: '' };
+    const drawNow = () => { now.innerHTML = nowParts.clock + nowParts.live; now.hidden = false; };
+    const tick = () => { nowParts.clock = '<span>Tallinn <b>' + tallinn() + '</b></span>'; drawNow(); };
+    tick(); setInterval(tick, 30000);
+    const live = (repos) => {
+      const by = Object.fromEntries(repos.map((r) => [r.name, r]));
+      const mine = listed.map((l) => ({ ...l, ...by[l.name] })).filter((r) => r.pushed_at).sort((x, y) => y.pushed_at.localeCompare(x.pushed_at));
+      if (!mine.length) return;
+      nowParts.live = '<span>last shipped <b>' + mine[0].label + '</b> ' + ago(mine[0].pushed_at) + '</span>';
+      drawNow();
+      stars(mine);
+      feed(mine.slice(0, 5));
+    };
+    const stars = (mine) => {
+      const ranked = mine.filter((r) => r.stargazers_count > 0).sort((x, y) => y.stargazers_count - x.stargazers_count);
+      if (!ranked.length) return;
+      const total = ranked.reduce((n, r) => n + r.stargazers_count, 0), max = ranked[0].stargazers_count;
+      $('.activity .summary').innerHTML = '<span><b>' + total + '</b> GitHub stars across ' + mine.length + ' open-source projects</span>' +
+        '<a href="https://github.com/sponsors/drumandbytes">Sponsor the work</a>';
+      $('.bars').innerHTML = ranked.map((r) =>
+        '<li><span class="n">' + r.label + '</span><span class="track"><span class="fill" style="--w:' + (r.stargazers_count / max).toFixed(3) + '"></span></span><span class="v">' + r.stargazers_count + '</span></li>').join('');
+      $('.activity').hidden = false;
+    };
+    const esc = (t) => t.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const drawFeed = (items) => {
+      $('.feed').innerHTML = items.length ? items.map((i) =>
+        '<li><a href="' + esc(i.url) + '">' + esc(i.label) + '</a><span>' + i.n + (i.n === 1 ? ' change' : ' changes') + ', ' + ago(i.date) + '</span></li>').join('')
+        : '<li class="none">Nothing to show right now.</li>';
+      $('.activity').hidden = false;
+    };
+    const feed = (repos) => {
+      try {
+        const hit = JSON.parse(sessionStorage.getItem('dnb-feed2') || 'null');
+        if (hit && Date.now() - hit.t < 36e5) return drawFeed(hit.d);
+      } catch (_) {}
+      const week = Date.now() - 7 * 864e5;
+      Promise.all(repos.map((r) => fetch('https://api.github.com/repos/drumandbytes/' + r.name + '/commits?per_page=30')
+        .then((x) => x.ok ? x.json() : [])
+        .then((cs) => cs.filter((c) => !/\[bot\]$/.test(c.author?.login || '') && !/^(chore|ci|build|Merge)\b/i.test(c.commit.message) && new Date(c.commit.author.date) > week)
+          .map((c) => c.commit.author.date))
+        .then((dates) => dates.length ? { label: r.label, url: 'https://github.com/drumandbytes/' + r.name + '/commits', n: dates.length, date: dates[0] } : null)
+        .catch(() => null)))
+        .then((all) => {
+          const items = all.filter(Boolean).sort((x, y) => y.date.localeCompare(x.date));
+          try { sessionStorage.setItem('dnb-feed2', JSON.stringify({ t: Date.now(), d: items })); } catch (_) {}
+          if (items.length) drawFeed(items);
+        });
+    };
+    sortBtn.addEventListener('click', () => {
+      const on = sortBtn.getAttribute('aria-pressed') !== 'true';
+      sortBtn.setAttribute('aria-pressed', on);
+      // reorder the DOM itself so tab order and j/k follow what you see
+      grid.append(...(on ? [...cards].sort((x, y) => (y.dataset.pushed || '').localeCompare(x.dataset.pushed || '')) : cards));
+    });
+    try {
+      const hit = JSON.parse(sessionStorage.getItem('dnb-repos') || 'null');
+      if (hit && Date.now() - hit.t < 36e5) paint(hit.d);
+      else fetch('https://api.github.com/users/drumandbytes/repos?per_page=100&sort=pushed')
+        .then((r) => r.ok ? r.json() : Promise.reject())
+        .then((d) => { sessionStorage.setItem('dnb-repos', JSON.stringify({ t: Date.now(), d: d.map(({ name, pushed_at, stargazers_count }) => ({ name, pushed_at, stargazers_count })) })); paint(d); })
+        .catch(() => {});
+    } catch (_) {}
+
+    // theme toggle
+    const themeBtn = $('.theme');
+    try { const t = localStorage.getItem('dnb-theme'); if (t) root.dataset.theme = t; } catch (_) {}
+    themeBtn.hidden = false;
+    themeBtn.addEventListener('click', () => {
+      const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+      root.dataset.theme = dark ? 'light' : 'dark';
+      try { localStorage.setItem('dnb-theme', root.dataset.theme); } catch (_) {}
+    });
+
+    // beat machine: a two-step break at 174 bpm, started by clicking the mark
+    const mark = $('.id .mark');
+    let ctx, timer, step = 0;
+    const noise = (t, len, type, freq, vol) => {
+      const buf = ctx.createBuffer(1, ctx.sampleRate * len, ctx.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      const src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+      src.buffer = buf; f.type = type; f.frequency.value = freq;
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + len);
+      src.connect(f).connect(g).connect(ctx.destination); src.start(t);
+    };
+    const kick = (t) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.12);
+      g.gain.setValueAtTime(0.9, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + 0.3);
+    };
+    const play = () => {
+      const t = ctx.currentTime + 0.02;
+      if (step === 0 || step === 10) { kick(t); mark.animate([{ transform: 'scale(1.14)' }, { transform: 'scale(1)' }], { duration: 160 }); }
+      if (step === 4 || step === 12) { noise(t, 0.18, 'highpass', 1500, 0.5); }
+      if (step % 2 === 0) noise(t, 0.04, 'highpass', 7000, 0.12);
+      step = (step + 1) % 16;
+    };
+    const stop = () => { clearInterval(timer); timer = null; mark.setAttribute('aria-pressed', 'false'); };
+    mark.addEventListener('click', () => {
+      if (timer) return stop();
+      ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+      ctx.resume(); step = 0;
+      timer = setInterval(play, 60000 / 174 / 4);
+      mark.setAttribute('aria-pressed', 'true');
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && timer) stop(); });
+
+    // command palette (Cmd/Ctrl+K)
+    const dlg = $('.palette'), pin = $('input', dlg), plist = $('ul', dlg);
+    const go = (u) => () => { location.href = u; };
+    const copyMail = () => navigator.clipboard && navigator.clipboard.writeText('maris@drumandbytes.com');
+    const cmds = [
+      ...$$('a.project').map((c) => ({ t: $('strong', c).textContent.trim(), h: 'Open project', k: c.textContent, run: go(c.href) })),
+      { t: 'Show all projects', h: 'Filter', run: () => setCat('all') },
+      { t: 'Show apps', h: 'Filter', run: () => setCat('app') },
+      { t: 'Show games', h: 'Filter', run: () => setCat('game') },
+      { t: 'Show tools', h: 'Filter', run: () => setCat('tool') },
+      { t: 'Toggle light / dark', h: 'Theme', run: () => themeBtn.click() },
+      { t: 'Play or stop the beat', h: 'Fun', run: () => mark.click() },
+      { t: 'Copy email address', h: 'Contact', run: copyMail },
+      { t: 'GitHub: drumandbytes', h: 'Link', run: go('https://github.com/drumandbytes') },
+      { t: 'Sponsor on GitHub', h: 'Link', run: go('https://github.com/sponsors/drumandbytes') },
+      { t: 'drumandbytes.com projects', h: 'Link', run: go('https://drumandbytes.com/projects/') },
+      { t: 'Privacy policy', h: 'Link', run: go('privacy/') },
+    ];
+    let shown = [], sel = 0;
+    const drawPalette = () => {
+      const words = pin.value.toLowerCase().split(/\s+/).filter(Boolean);
+      shown = cmds.filter((c) => words.every((w) => (c.t + ' ' + (c.k || '') + ' ' + c.h).toLowerCase().includes(w)));
+      sel = Math.min(sel, Math.max(shown.length - 1, 0));
+      plist.innerHTML = shown.length ? shown.map((c, i) => '<li role="option" data-i="' + i + '" aria-selected="' + (i === sel) + '"><span>' + esc(c.t) + '</span><span>' + c.h + '</span></li>').join('')
+        : '<li class="none">No matches</li>';
+      const el = $('[aria-selected="true"]', plist); if (el) el.scrollIntoView({ block: 'nearest' });
+    };
+    const run = (i) => { const c = shown[i]; if (!c) return; dlg.close(); c.run(); };
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (dlg.open) return dlg.close();
+        pin.value = ''; sel = 0; drawPalette(); dlg.showModal(); pin.focus();
+      }
+    });
+    pin.addEventListener('input', () => { sel = 0; drawPalette(); });
+    pin.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(sel + 1, shown.length - 1); drawPalette(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(sel - 1, 0); drawPalette(); }
+      else if (e.key === 'Enter') { e.preventDefault(); run(sel); }
+    });
+    plist.addEventListener('click', (e) => { const li = e.target.closest('li[data-i]'); if (li) run(+li.dataset.i); });
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+
+    // copy email
+    const copy = $('.copy');
+    if (copy && navigator.clipboard) {
+      copy.hidden = false;
+      copy.addEventListener('click', () => navigator.clipboard.writeText('maris@drumandbytes.com').then(() => {
+        copy.textContent = 'Copied'; setTimeout(() => (copy.textContent = 'Copy'), 1500);
+      }));
+    }
+  })();
+  </script>
 </body>
 </html>
