@@ -28,7 +28,7 @@
     "url": "https://drumandbytes.ee/",
     "logo": "https://drumandbytes.ee/assets/logo.png",
     "identifier": "17599202",
-    "email": "maris@drumandbytes.com",
+    "email": "contact@drumandbytes.com",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Uus-Sadama tn 21-207",
@@ -439,7 +439,7 @@
     <footer>
       <span class="legal-name">Drumandbytes OÜ</span> · registry code <code>17599202</code><br>
       Uus-Sadama tn 21-207, Kesklinna linnaosa, Tallinn, Harju maakond, 10120, Estonia<br>
-      <a href="mailto:maris@drumandbytes.com">maris@drumandbytes.com</a> <button class="copy" type="button" hidden aria-live="polite">Copy</button> · <a href="privacy/">Privacy</a>
+      <a href="mailto:contact@drumandbytes.com">contact@drumandbytes.com</a> <button class="copy" type="button" hidden aria-live="polite">Copy</button> · <a href="privacy/">Privacy</a>
       <div class="credit">Headphones mark: <a href="https://openmoji.org">OpenMoji</a> (CC BY-SA 4.0).</div>
     </footer>
   </main>
@@ -648,7 +648,7 @@
     // command palette (Cmd/Ctrl+K)
     const dlg = $('.palette'), pin = $('input', dlg), plist = $('ul', dlg);
     const go = (u) => () => { location.href = u; };
-    const copyMail = () => navigator.clipboard && navigator.clipboard.writeText('maris@drumandbytes.com');
+    const copyMail = () => navigator.clipboard && navigator.clipboard.writeText('contact@drumandbytes.com');
     const cmds = [
       ...$$('a.project').map((c) => ({ t: $('strong', c).textContent.trim(), h: 'Open project', k: c.textContent, run: go(c.href) })),
       { t: 'Show all projects', h: 'Filter', run: () => setCat('all') },
@@ -693,7 +693,7 @@
     const copy = $('.copy');
     if (copy && navigator.clipboard) {
       copy.hidden = false;
-      copy.addEventListener('click', () => navigator.clipboard.writeText('maris@drumandbytes.com').then(() => {
+      copy.addEventListener('click', () => navigator.clipboard.writeText('contact@drumandbytes.com').then(() => {
         copy.textContent = 'Copied'; setTimeout(() => (copy.textContent = 'Copy'), 1500);
       }));
     }
